@@ -1,5 +1,4 @@
 import Button from '@/components/Button';
-import Icon from 'assets/images/google-logo.svg';
 import { useRouter } from 'expo-router';
 import { Image, StyleSheet, Text, View } from "react-native";
 
@@ -19,11 +18,11 @@ export default function Index() {
       <View style={{ gap: 15, alignItems: 'center', width: '80%' }}>
         <View style={[styles.primaryButtonContainer]}>
           <Button title="Entrar" onPress={() => router.push('/login')}/>
-          <Button title="Cadastrar" onPress={() => alert('Primary clicked')} />
+          <Button title="Cadastrar" onPress={() => router.push('/dashboard')} />
         </View>
-        <View style={{width: '80%'}}>
+        {/* <View style={{width: '80%'}}>
           <Button title="" onPress={() => alert('Secondary clicked')} variant="secondary" icon={<Icon width={24} height={24}/>} />
-        </View>
+        </View> */}
       </View>
 
     </View>
