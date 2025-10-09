@@ -18,8 +18,60 @@ export default function Dashboard() {
                 </View>
             </View>
         </View>
+        <View style={styles.main}>
+          <View style={styles.solicitacoes}>
+            <View style={styles.headerSolicitacoes}>
+              <Text style={{fontWeight: "700", fontSize: 20, color: "#FFFFFF"}}>Solicitações</Text>
+              <Text style={{fontWeight: "700", fontSize: 12, color: "#67EB60"}}>Ver todas</Text>
+            </View>
+            <View style={styles.boxSolicitacoesContainer}>
+              <View style={styles.box}>
+                <View style={styles.imageSolicitacoesContainer}>
+                  <Image source={require("assets/images/pendente.png")} style={styles.imageSolicitacoes}></Image>
+                </View>
+                <View>
+                  <Text>******</Text>
+                  <Text>Pendente</Text>
+                </View>
+              </View>
+              <View style={styles.box}>
+                <View style={styles.imageSolicitacoesContainer}>  
+                  <Image source={require("assets/images/aprovada.png")} style={styles.imageSolicitacoes}></Image>
+                </View>
+                <View>
+                  <Text>******</Text>
+                  <Text>Aprovada</Text>
+                </View>
+              </View>
+              <View style={styles.box}>
+                <View style={styles.imageSolicitacoesContainer}> 
+                  <Image source={require("assets/images/recusada.png")} style={styles.imageSolicitacoes}></Image>
+                </View>
+                <View>
+                  <Text>******</Text>
+                  <Text>Recusada</Text>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
         <View style={styles.footer}>
-
+          <View style={styles.footerContent}>
+              <Image source={require('assets/images/home-green.png')} style={styles.image}></Image>
+            <Text style={styles.textFooter}>Home</Text>
+          </View>
+          <View style={styles.footerContent}>
+              <Image source={require('assets/images/ranking.png')} style={styles.image}></Image>
+            <Text style={styles.textFooter}>Ranking</Text>
+          </View>
+          <View style={styles.footerContent}>
+              <Image source={require('assets/images/trocar-verde.png')} style={styles.image}></Image>
+            <Text style={styles.textFooter}>Trocas</Text>
+          </View>
+          <View style={styles.footerContent}> 
+              <Image source={require('assets/images/tag-green.png')} style={styles.image}></Image>
+            <Text style={styles.textFooter}>Loja</Text>
+          </View>
         </View>
     </View>
   );
@@ -91,14 +143,72 @@ const styles = StyleSheet.create({
     height: "100%",
     objectFit: "cover"
   },
+  main: {
+    width: "100%",
+    alignItems: "center"
+  },
+  solicitacoes: {
+    width: "100%",
+    padding: 20,
+    gap: 10
+  },
+  headerSolicitacoes: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
+  },
+  boxSolicitacoesContainer: {
+    gap: 10
+  },
+  box: {
+    height: 88,
+    backgroundColor: "#282828",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 15
+  },
+  imageSolicitacoesContainer: {
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  imageSolicitacoes: {
+    width: 70,
+    height: 70
+  },
   footer: {
     width: "90%",
-    height: 72,
-    backgroundColor: "red",
+    height: "auto",
+    backgroundColor: "#171717",
     position: "absolute",
     bottom: 0,
-    margin: 25,
-    borderRadius: 18
+    margin: 40,
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderRadius: 18,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    shadowColor: 'rgba(80, 230, 0, 1)',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.6,
+    shadowRadius: 6,
+    elevation: 10
+  },
+  footerContent: {
+    alignItems: "center"
+  },
+  image: {
+    width: 48,
+    height: 48
+  },
+  textFooter: {
+    color: "#67EB60",
+    fontSize: 14,
+    fontWeight: "700"
   },
   primaryButtonContainer: {
     width: '100%',
