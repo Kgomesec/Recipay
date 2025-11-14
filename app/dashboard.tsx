@@ -1,8 +1,19 @@
+import Button from '@/components/Button';
 import { useRouter } from 'expo-router';
 import { Image, StyleSheet, Text, View } from "react-native";
 
+
 export default function Dashboard() {
   const router = useRouter();
+  // const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+
+  // const onModalOpen = () => {
+  //   setIsModalVisible(true);
+  // };
+
+  // const onModalClose = () => {
+  //   setIsModalVisible(false);
+  // };
 
   return (
     <View style={[styles.body]} >
@@ -14,15 +25,26 @@ export default function Dashboard() {
             <View style={styles.containerLogo}> 
                 <Image source={require('assets/images/eye-open.png')} style={styles.eye}></Image>
                 <View style={styles.containerLeaf}>
-                    <Image source={require('assets/images/leaf.png')} style={styles.imageLeaf}></Image>
+                  <Button
+                    variant="transparent"
+                    onPress={() => router.push('/newOrder')}
+                  />
                 </View>
             </View>
         </View>
         <View style={styles.main}>
+          <View style={styles.carteira}>
+            <Text style={styles.textCarteira}>Total em carteira</Text>
+            <View>
+              <Text style={styles.textBig}>1050,32 RP</Text>
+              <Text style={{fontWeight: "600", fontSize: 16, color: "#67EB60"}}>750 RP liquído</Text>
+            </View>
+          </View>
           <View style={styles.solicitacoes}>
             <View style={styles.headerSolicitacoes}>
               <Text style={{fontWeight: "700", fontSize: 20, color: "#FFFFFF"}}>Solicitações</Text>
               <Text style={{fontWeight: "700", fontSize: 12, color: "#67EB60"}}>Ver todas</Text>
+              {/* <Text style={{fontWeight: "700", fontSize: 12, color: "#67EB60"}} onPress={onModalOpen}>Ver todas</Text> */}
             </View>
             <View style={styles.boxSolicitacoesContainer}>
               <View style={styles.box}>
@@ -30,8 +52,8 @@ export default function Dashboard() {
                   <Image source={require("assets/images/pendente.png")} style={styles.imageSolicitacoes}></Image>
                 </View>
                 <View>
-                  <Text>******</Text>
-                  <Text>Pendente</Text>
+                  <Text style={styles.textBig}>300,32 RP</Text> 
+                  <Text style={styles.textSmall}>Pendente</Text>
                 </View>
               </View>
               <View style={styles.box}>
@@ -39,8 +61,8 @@ export default function Dashboard() {
                   <Image source={require("assets/images/aprovada.png")} style={styles.imageSolicitacoes}></Image>
                 </View>
                 <View>
-                  <Text>******</Text>
-                  <Text>Aprovada</Text>
+                  <Text style={styles.textBig}>750 RP</Text>
+                  <Text style={styles.textSmall}>Aprovada</Text>
                 </View>
               </View>
               <View style={styles.box}>
@@ -48,8 +70,8 @@ export default function Dashboard() {
                   <Image source={require("assets/images/recusada.png")} style={styles.imageSolicitacoes}></Image>
                 </View>
                 <View>
-                  <Text>******</Text>
-                  <Text>Recusada</Text>
+                  <Text style={styles.textBig}>200 RP</Text>
+                  <Text style={styles.textSmall}>Recusada</Text>
                 </View>
               </View>
             </View>
@@ -73,6 +95,9 @@ export default function Dashboard() {
             <Text style={styles.textFooter}>Loja</Text>
           </View>
         </View>
+        {/* <ModalCenter isVisible={isModalVisible} onClose={onModalClose}>
+          
+        </ModalCenter> */}
     </View>
   );
 }
@@ -138,14 +163,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  imageLeaf: {
-    width: "100%",
-    height: "100%",
-    objectFit: "cover"
-  },
+  // imageLeaf: {
+  //   width: "100%",
+  //   height: "100%",
+  //   objectFit: "cover"
+  // },
   main: {
     width: "100%",
     alignItems: "center"
+  },
+  carteira: {
+    width: "90%",
+    marginTop: 20,
+    display: "flex",
+    flexDirection: "column",
+    gap: 10
   },
   solicitacoes: {
     width: "100%",
@@ -167,7 +199,9 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: 15
+    borderRadius: 15,
+    gap: 20,
+    padding: 6
   },
   imageSolicitacoesContainer: {
     height: "100%",
@@ -223,5 +257,20 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 24,
     fontWeight: 600,
-  }
+  },
+  textBig: {
+    color: '#FFFFFF',
+    fontSize: 32,
+    fontWeight: '600',
+  },
+  textSmall: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  textCarteira: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '400',
+  },
 });

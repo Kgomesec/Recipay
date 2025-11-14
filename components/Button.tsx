@@ -2,6 +2,7 @@ import React from 'react'
 import {
   GestureResponderEvent,
   Image,
+  ImageSourcePropType,
   ImageStyle,
   StyleSheet,
   Text,
@@ -10,10 +11,10 @@ import {
   ViewStyle,
 } from 'react-native'
 
-type ButtonVariant = 'primary' | 'secondary'
+type ButtonVariant = 'primary' | 'secondary' | 'transparent' | 'image'
 
 interface ButtonProps {
-  title: string
+  title?: string
   onPress: (event: GestureResponderEvent) => void
   style?: ViewStyle
   textStyle?: TextStyle
@@ -21,10 +22,14 @@ interface ButtonProps {
   variant?: ButtonVariant
   icon?: React.ReactNode  
   iconStyle?: ImageStyle
+
+  // Novo prop para botão com imagem
+  imageSource?: ImageSourcePropType
+  imageStyle?: ImageStyle
 }
 
 export default function Button({
-  title,
+  title = '',
   onPress,
   style,
   textStyle,
@@ -32,6 +37,8 @@ export default function Button({
   variant = 'primary',
   icon,
   iconStyle,
+  imageSource,
+  imageStyle
 }: ButtonProps) {
   const getBackgroundColor = () => {
     if (disabled) return '#aaa'
@@ -39,6 +46,10 @@ export default function Button({
     switch (variant) {
       case 'secondary':
         return '#FFFFFF'
+      case 'transparent':
+        return 'transparent'
+      case 'image':
+        return 'transparent'
       case 'primary':
       default:
         return '#36C23E'
@@ -47,12 +58,21 @@ export default function Button({
 
   return (
     <TouchableOpacity
-      style={[styles.button, { backgroundColor: getBackgroundColor() }, style]}
+      style={[
+        styles.button,
+        { backgroundColor: getBackgroundColor() },
+        variant === 'transparent' && styles.transparentButton,
+        style,
+      ]}
       onPress={onPress}
       activeOpacity={0.7}
       disabled={disabled}
     >
-      {variant === 'secondary' && icon ? (
+      {variant === 'transparent' ? (
+        <Text style={styles.plusText}>+</Text>
+      ) : variant === 'image' && imageSource ? (
+        <Image source={imageSource} style={[styles.imageButton, imageStyle]} />
+      ) : variant === 'secondary' && icon ? (
         typeof icon === 'string' ? (
           <Image source={{ uri: icon }} style={[styles.icon, iconStyle]} />
         ) : (
@@ -73,14 +93,35 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
   text: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
   },
+
   icon: {
     width: 24,
     height: 24,
+    resizeMode: 'contain',
+  },
+
+  transparentButton: {
+    borderWidth: 2,
+    borderColor: 'transparent',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+  },
+
+  plusText: {
+    fontSize: 28,
+    color: '#36C23E',
+    fontWeight: 'bold',
+  },
+
+  imageButton: {
+    width: 45,
+    height: 45,
     resizeMode: 'contain',
   },
 })
