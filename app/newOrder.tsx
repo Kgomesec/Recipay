@@ -9,7 +9,7 @@ export default function NewOrder() {
         <View style={[styles.body]}>
             <View style={[styles.header]}>
                 <View style={styles.containerUser}>
-                    <View style={styles.user}><Image source={require('assets/images/user.jpg')} style={styles.userImage}></Image></View>
+                    <View style={styles.user}><Image source={require('@/assets/images/user.jpg')} style={styles.userImage}></Image></View>
                     <Text style={styles.text}>Olá, Miguel</Text>
                 </View>
             </View>
@@ -17,7 +17,7 @@ export default function NewOrder() {
                 <View style={styles.containerBack}>
                     <Button
                         variant="image"
-                        imageSource={require('assets/images/voltar.png')}
+                        imageSource={require('@/assets/images/voltar.png')}
                         onPress={() => router.back()}
                     />
                 </View>
@@ -26,12 +26,33 @@ export default function NewOrder() {
                         <Text style={styles.textMaterials}>Materiais</Text> 
                         <View style={styles.itemsContainer}>
                             <View style={styles.item}>
-                                {/* inputcheckbox */}
-                                <Text style={styles.itemText}>Cimento</Text>
+                                <Text style={styles.itemText}>Plástico</Text>
+                            </View>
+                            <View style={styles.item}>
+                                <Text style={styles.itemText}>Vidro</Text>
+                            </View>
+                            <View style={styles.item}>
+                                <Text style={styles.itemText}>Metal</Text>
+                            </View>
+                            <View style={styles.item}>
+                                <Text style={styles.itemText}>Papel</Text>
                             </View>
                         </View>
-                        
-                        
+                    </View>
+
+                    <View style={styles.materialsContainer}>
+                        <Text style={styles.textMaterials}>Quantidade</Text> 
+                        <View style={styles.itemsContainer}>
+                            <View style={styles.item}>
+                                <Text style={styles.itemText}>Grande escala (100 kg+)</Text>
+                            </View>
+                            <View style={styles.item}>
+                                <Text style={styles.itemText}>Média escala (30 - 60 kg)</Text>
+                            </View>
+                            <View style={styles.item}>
+                                <Text style={styles.itemText}>Pequena escala (10 - 29 kg)</Text>
+                            </View>
+                        </View>
                     </View>
                 </View>
             </View>

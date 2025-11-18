@@ -19,11 +19,11 @@ export default function Dashboard() {
     <View style={[styles.body]} >
         <View style={[styles.header]}>
             <View style={styles.containerUser}>
-                <View style={styles.user}><Image source={require('assets/images/user.jpg')} style={styles.userImage}></Image></View>
+                <View style={styles.user}><Image source={require('@/assets/images/user.jpg')} style={styles.userImage}></Image></View>
                 <Text style={styles.text}>Olá, Miguel</Text>
             </View>
             <View style={styles.containerLogo}> 
-                <Image source={require('assets/images/eye-open.png')} style={styles.eye}></Image>
+                <Image source={require('@/assets/images/eye-open.png')} style={styles.eye}></Image>
                 <View style={styles.containerLeaf}>
                   <Button
                     variant="transparent"
@@ -49,7 +49,7 @@ export default function Dashboard() {
             <View style={styles.boxSolicitacoesContainer}>
               <View style={styles.box}>
                 <View style={styles.imageSolicitacoesContainer}>
-                  <Image source={require("assets/images/pendente.png")} style={styles.imageSolicitacoes}></Image>
+                  <Image source={require("@/assets/images/pendente.png")} style={styles.imageSolicitacoes}></Image>
                 </View>
                 <View>
                   <Text style={styles.textBig}>300,32 RP</Text> 
@@ -58,7 +58,7 @@ export default function Dashboard() {
               </View>
               <View style={styles.box}>
                 <View style={styles.imageSolicitacoesContainer}>  
-                  <Image source={require("assets/images/aprovada.png")} style={styles.imageSolicitacoes}></Image>
+                  <Image source={require("@/assets/images/aprovada.png")} style={styles.imageSolicitacoes}></Image>
                 </View>
                 <View>
                   <Text style={styles.textBig}>750 RP</Text>
@@ -67,7 +67,7 @@ export default function Dashboard() {
               </View>
               <View style={styles.box}>
                 <View style={styles.imageSolicitacoesContainer}> 
-                  <Image source={require("assets/images/recusada.png")} style={styles.imageSolicitacoes}></Image>
+                  <Image source={require("@/assets/images/recusada.png")} style={styles.imageSolicitacoes}></Image>
                 </View>
                 <View>
                   <Text style={styles.textBig}>200 RP</Text>
@@ -79,19 +79,19 @@ export default function Dashboard() {
         </View>
         <View style={styles.footer}>
           <View style={styles.footerContent}>
-              <Image source={require('assets/images/home-green.png')} style={styles.image}></Image>
+              <Image source={require('@/assets/images/home-green.png')} style={styles.image}></Image>
             <Text style={styles.textFooter}>Home</Text>
           </View>
           <View style={styles.footerContent}>
-              <Image source={require('assets/images/ranking.png')} style={styles.image}></Image>
+              <Image source={require('@/assets/images/ranking.png')} style={styles.image}></Image>
             <Text style={styles.textFooter}>Ranking</Text>
           </View>
           <View style={styles.footerContent}>
-              <Image source={require('assets/images/trocar-verde.png')} style={styles.image}></Image>
+              <Image source={require('@/assets/images/trocar-verde.png')} style={styles.image}></Image>
             <Text style={styles.textFooter}>Trocas</Text>
           </View>
           <View style={styles.footerContent}> 
-              <Image source={require('assets/images/tag-green.png')} style={styles.image}></Image>
+              <Image source={require('@/assets/images/tag-green.png')} style={styles.image}></Image>
             <Text style={styles.textFooter}>Loja</Text>
           </View>
         </View>

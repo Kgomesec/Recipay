@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import {
-    Image,
-    StyleSheet,
-    Text,
-    TextInput,
-    TextInputProps,
-    TouchableOpacity,
-    View,
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TextInputProps,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 type InputProps = TextInputProps & {
@@ -83,8 +83,8 @@ export default function Input({
             <Image
               source={
                 showPassword
-                  ? require('assets/images/eye-open.png') 
-                  : require('assets/images/eye-closed.png') 
+                  ? require('@/assets/images/eye-open.png') 
+                  : require('@/assets/images/eye-closed.png') 
               }
               style={styles.eyeIcon}
             />

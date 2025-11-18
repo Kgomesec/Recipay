@@ -9,7 +9,7 @@ export default function Index() {
     <View style={[styles.body]} >
       <View style={{ position: 'absolute', top: 0, backgroundColor: '#36C23E', width: '100%', height: 15}} />
       <View style={{ alignItems: 'center'}}>
-        <Image source={require('assets/images/coins.png')} style={{ width: 378, height: 378, marginBottom: 20 }} />
+        <Image source={require('@/assets/images/coins.png')} style={{ width: 378, height: 378, marginBottom: 20 }} />
         <View style={[styles.textContainer]}>
           <Text style={[styles.text]}>RECICLE POR RECOMPENSAS</Text>
           <Text style={[styles.text]}>O SEU GESTO VALE AQUI</Text>
