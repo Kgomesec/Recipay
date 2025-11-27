@@ -1,3 +1,4 @@
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons'
 import React from 'react'
 import {
   GestureResponderEvent,
@@ -8,10 +9,16 @@ import {
   Text,
   TextStyle,
   TouchableOpacity,
+  View,
   ViewStyle,
 } from 'react-native'
 
-type ButtonVariant = 'primary' | 'secondary' | 'transparent' | 'image'
+type ButtonVariant =
+  | 'primary'
+  | 'secondary'
+  | 'transparent'
+  | 'image'
+  | 'address'
 
 interface ButtonProps {
   title?: string
@@ -20,12 +27,16 @@ interface ButtonProps {
   textStyle?: TextStyle
   disabled?: boolean
   variant?: ButtonVariant
-  icon?: React.ReactNode  
+  icon?: React.ReactNode
   iconStyle?: ImageStyle
 
-  // Novo prop para botão com imagem
   imageSource?: ImageSourcePropType
   imageStyle?: ImageStyle
+
+  street?: string
+  city?: string
+  leftIcon?: React.ReactNode
+  rightIcon?: React.ReactNode
 }
 
 export default function Button({
@@ -38,7 +49,11 @@ export default function Button({
   icon,
   iconStyle,
   imageSource,
-  imageStyle
+  imageStyle,
+  street,
+  city,
+  leftIcon,
+  rightIcon,
 }: ButtonProps) {
   const getBackgroundColor = () => {
     if (disabled) return '#aaa'
@@ -50,6 +65,8 @@ export default function Button({
         return 'transparent'
       case 'image':
         return 'transparent'
+      case 'address':
+        return '#2a2a2a'
       case 'primary':
       default:
         return '#36C23E'
@@ -62,13 +79,28 @@ export default function Button({
         styles.button,
         { backgroundColor: getBackgroundColor() },
         variant === 'transparent' && styles.transparentButton,
+        variant === 'address' && styles.addressContainer,
         style,
       ]}
       onPress={onPress}
       activeOpacity={0.7}
       disabled={disabled}
     >
-      {variant === 'transparent' ? (
+      {variant === 'address' ? (
+        <>
+          {leftIcon || <Feather name="home" size={28} color="#fff" />}
+
+          <View style={styles.addressTextContainer}>
+            <Text style={styles.addressStreet}>{street}</Text>
+            <Text style={styles.addressCity}>{city}</Text>
+          </View>
+
+          {/* Ícone direita */}
+          {rightIcon || (
+            <MaterialCommunityIcons name="sync" size={24} color="#fff" />
+          )}
+        </>
+      ) : variant === 'transparent' ? (
         <Text style={styles.plusText}>+</Text>
       ) : variant === 'image' && imageSource ? (
         <Image source={imageSource} style={[styles.imageButton, imageStyle]} />
@@ -89,9 +121,10 @@ const styles = StyleSheet.create({
   button: {
     paddingVertical: 12,
     paddingHorizontal: 24,
-    borderRadius: 8,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection: 'row',
   },
 
   text: {
@@ -123,5 +156,27 @@ const styles = StyleSheet.create({
     width: 45,
     height: 45,
     resizeMode: 'contain',
+  },
+
+  addressContainer: {
+    paddingVertical: 16,
+    paddingHorizontal: 18,
+    borderRadius: 16,
+    gap: 14,
+  },
+
+  addressTextContainer: {
+    flex: 1,
+  },
+
+  addressStreet: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+
+  addressCity: {
+    color: '#ccc',
+    fontSize: 14,
   },
 })

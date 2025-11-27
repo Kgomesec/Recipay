@@ -1,6 +1,6 @@
 import Button from '@/components/Button';
 import { useRouter } from 'expo-router';
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
 
 export default function Dashboard() {
@@ -43,7 +43,7 @@ export default function Dashboard() {
           <View style={styles.solicitacoes}>
             <View style={styles.headerSolicitacoes}>
               <Text style={{fontWeight: "700", fontSize: 20, color: "#FFFFFF"}}>Solicitações</Text>
-              <Text style={{fontWeight: "700", fontSize: 12, color: "#67EB60"}}>Ver todas</Text>
+              <Text style={{fontWeight: "700", fontSize: 12, color: "#67EB60"}} onPress={() => router.push('/orders')}>Ver todas</Text>
               {/* <Text style={{fontWeight: "700", fontSize: 12, color: "#67EB60"}} onPress={onModalOpen}>Ver todas</Text> */}
             </View>
             <View style={styles.boxSolicitacoesContainer}>
@@ -86,10 +86,10 @@ export default function Dashboard() {
               <Image source={require('@/assets/images/ranking.png')} style={styles.image}></Image>
             <Text style={styles.textFooter}>Ranking</Text>
           </View>
-          <View style={styles.footerContent}>
+          <Pressable style={styles.footerContent} onPress={() => router.push('/trade')}>
               <Image source={require('@/assets/images/trocar-verde.png')} style={styles.image}></Image>
             <Text style={styles.textFooter}>Trocas</Text>
-          </View>
+          </Pressable>
           <View style={styles.footerContent}> 
               <Image source={require('@/assets/images/tag-green.png')} style={styles.image}></Image>
             <Text style={styles.textFooter}>Loja</Text>
