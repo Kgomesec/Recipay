@@ -90,10 +90,10 @@ export default function Dashboard() {
               <Image source={require('@/assets/images/trocar-verde.png')} style={styles.image}></Image>
             <Text style={styles.textFooter}>Trocas</Text>
           </Pressable>
-          <View style={styles.footerContent}> 
+          <Pressable style={styles.footerContent} onPress={() => router.push('/store')}> 
               <Image source={require('@/assets/images/tag-green.png')} style={styles.image}></Image>
             <Text style={styles.textFooter}>Loja</Text>
-          </View>
+          </Pressable>
         </View>
         {/* <ModalCenter isVisible={isModalVisible} onClose={onModalClose}>
           

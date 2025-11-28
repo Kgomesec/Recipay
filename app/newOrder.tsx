@@ -120,6 +120,7 @@ export default function NewOrder() {
                             variant="primary"
                             title="NOVA SOLICITAÇÃO"
                             onPress={() => router.push('/newOrder')}
+                            style={{marginBottom: 50}}
                         />
                     </View>
                 </View>
