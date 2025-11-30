@@ -23,14 +23,76 @@ export default function Store() {
                     </View>
                 </View>
             </View>
-            <HorizontalScrollbar height={320}>
-                <Image source={require('@/assets/images/ps60.png')} style={{ width: 300, height: 300 }}></Image>
-                <Image source={require('@/assets/images/ps60.png')} style={{ width: 300, height: 300 }}></Image>
-                <Image source={require('@/assets/images/ps60.png')} style={{ width: 300, height: 300 }}></Image>
-                <Image source={require('@/assets/images/ps60.png')} style={{ width: 300, height: 300 }}></Image>
-                <Image source={require('@/assets/images/ps60.png')} style={{ width: 300, height: 300 }}></Image>
-                <Image source={require('@/assets/images/ps60.png')} style={{ width: 300, height: 300 }}></Image>
-            </HorizontalScrollbar>
+            <View style={styles.main}>
+                <View style={styles.containerBack}>
+                    <Button
+                        variant="image"
+                        imageSource={require('@/assets/images/voltar.png')}
+                        onPress={() => router.back()}
+                    />
+                </View>
+                <View style={{ width: "100%" }}>
+                    <Text style={styles.title}>Serviços Digitais</Text>
+                    <View style={{ height: 500, width: "100%"  }}>
+                        <HorizontalScrollbar>
+                            <View style={styles.card}>
+                                <Image source={require('@/assets/images/ps60.png')} style={{ width: 300, height: 300 }}></Image>
+                                <Button
+                                    variant="primary"
+                                    title="2000 RP"
+                                    onPress={() => { }}
+                                    style={{ width: "55%", paddingTop: 15, paddingBottom: 15 }}
+                                />
+                            </View>
+                            <View style={styles.card}>
+                                <Image source={require('@/assets/images/ps100.png')} style={{ width: 300, height: 300 }}></Image>
+                                <Button
+                                    variant="primary"
+                                    title="2000 RP"
+                                    onPress={() => { }}
+                                    style={{ width: "55%", paddingTop: 15, paddingBottom: 15 }}
+                                />
+                            </View>
+                            <View style={styles.card}>
+                                <Image source={require('@/assets/images/gamepass.png')} style={{ width: 300, height: 300 }}></Image>
+                                <Button
+                                    variant="primary"
+                                    title="2000 RP"
+                                    onPress={() => { }}
+                                    style={{ width: "55%", paddingTop: 15, paddingBottom: 15 }}
+                                />
+                            </View>
+                            <View style={styles.card}>
+                                <Image source={require('@/assets/images/razer50.png')} style={{ width: 300, height: 300 }}></Image>
+                                <Button
+                                    variant="primary"
+                                    title="2000 RP"
+                                    onPress={() => { }}
+                                    style={{ width: "55%", paddingTop: 15, paddingBottom: 15 }}
+                                />
+                            </View>
+                            <View style={styles.card}>
+                                <Image source={require('@/assets/images/xbox5.png')} style={{ width: 300, height: 300 }}></Image>
+                                <Button
+                                    variant="primary"
+                                    title="2000 RP"
+                                    onPress={() => { }}
+                                    style={{ width: "55%", paddingTop: 15, paddingBottom: 15 }}
+                                />
+                            </View>
+                            <View style={styles.card}>
+                                <Image source={require('@/assets/images/xbox10.png')} style={{ width: 300, height: 300 }}></Image>
+                                <Button
+                                    variant="primary"
+                                    title="2000 RP"
+                                    onPress={() => { }}
+                                    style={{ width: "55%", paddingTop: 15, paddingBottom: 15 }}
+                                />
+                            </View>
+                        </HorizontalScrollbar>
+                    </View>
+                </View>
+            </View>
         </View>
     );
 }
@@ -105,5 +167,30 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         fontSize: 24,
         fontWeight: 600,
+    },
+    card: {
+        paddingTop: 20,
+        paddingBottom: 20,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        // marginHorizontal: -40
+    },
+    main: {
+        width: "100%",
+        alignItems: "center"
+    },
+    containerBack: {
+        width: "100%",
+        margin: 15,
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    title: {
+        color: '#FFFFFF',
+        fontSize: 36,
+        fontWeight: 700,
+        marginLeft: 20
     },
 });

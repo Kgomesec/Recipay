@@ -2,21 +2,20 @@ import React, { useRef, useState } from "react";
 import { Animated, NativeScrollEvent, NativeSyntheticEvent, ScrollView, View } from "react-native";
 
 interface Props {
-  height: number;
+  // height: number;
   thumbColor?: string;
   trackColor?: string;
   children?: React.ReactNode;
 }
 
 const HorizontalScrollWithScrollbar = ({
-  height,
+  // height,
   thumbColor = "#36C23E",
   trackColor = "#2A2A2A",
   children
 }: Props) => {
   const scrollX = useRef(new Animated.Value(0)).current;
 
-  // ⭐ Correção REAL: usar state ao invés de ref
   const [contentWidth, setContentWidth] = useState(0);
   const [layoutWidth, setLayoutWidth] = useState(0);
 
@@ -24,7 +23,6 @@ const HorizontalScrollWithScrollbar = ({
     scrollX.setValue(e.nativeEvent.contentOffset.x);
   };
 
-  // Só calcula se já tiver valores reais
   const ratio = layoutWidth / contentWidth;
 
   const thumbWidth = scrollX.interpolate({
@@ -45,16 +43,18 @@ const HorizontalScrollWithScrollbar = ({
     layoutWidth > 0;
 
   return (
-    <View style={{ width: "100%", height }}>
+    <View style={{ width: "100%", height: "100%" }}>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         onScroll={handleScroll}
         scrollEventThrottle={16}
-        onContentSizeChange={(w) => setContentWidth(w)} // agora força render
-        onLayout={(e) => setLayoutWidth(e.nativeEvent.layout.width)} // agora força render
+        onContentSizeChange={(w) => setContentWidth(w)}
+        onLayout={(e) => setLayoutWidth(e.nativeEvent.layout.width)}
       >
-        {children}
+        <View style={{ flexDirection: "row", gap: 20 }}>
+          {children}
+        </View>
       </ScrollView>
 
       {shouldRenderBar && (
