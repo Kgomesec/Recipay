@@ -1,29 +1,61 @@
 import Button from '@/components/Button';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-
+import React, { useEffect, useState } from 'react';
+import { Alert, Image, Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function Dashboard() {
   const router = useRouter();
-  // const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [firstName, setFirstName] = useState('');
 
-  // const onModalOpen = () => {
-  //   setIsModalVisible(true);
-  // };
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const sessionStr = await AsyncStorage.getItem('session');
+        if (sessionStr) {
+          const session = JSON.parse(sessionStr);
+          const nomeCompleto = session.name || 'Usuário';
+          const primeiroNome = nomeCompleto.split(' ')[0];
+          setFirstName(primeiroNome);
+        }
+      } catch (err) {
+        console.log('Erro ao carregar usuário:', err);
+      }
+    };
 
-  // const onModalClose = () => {
-  //   setIsModalVisible(false);
-  // };
+    loadUser();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem('session');
+      await AsyncStorage.removeItem('userId');
+      await AsyncStorage.removeItem('userEmail');
+      await AsyncStorage.removeItem('userRole');
+
+      await fetch('http://192.168.15.12:3000/auth/logout', { method: 'POST', credentials: 'include' });
+
+      Alert.alert('Logout', 'Você saiu da conta');
+      router.replace('/login');
+    } catch (err) {
+      console.log('Erro no logout:', err);
+      Alert.alert('Erro', 'Falha ao sair da conta');
+    }
+  };
 
   return (
     <View style={[styles.body]} >
         <View style={[styles.header]}>
             <View style={styles.containerUser}>
-                <View style={styles.user}><Image source={require('@/assets/images/user.jpg')} style={styles.userImage}></Image></View>
-                <Text style={styles.text}>Olá, Miguel</Text>
+                <View style={styles.user}>
+                  <Image source={require('@/assets/images/user.jpg')} style={styles.userImage}></Image>
+                </View>
+                <Text style={styles.text}>Olá, {firstName}</Text>
             </View>
             <View style={styles.containerLogo}> 
-                <Image source={require('@/assets/images/eye-open.png')} style={styles.eye}></Image>
+                <Pressable onPress={handleLogout}>
+                  <Image source={require('@/assets/images/eye-open.png')} style={styles.eye}></Image>
+                </Pressable>
                 <View style={styles.containerLeaf}>
                   <Button
                     variant="transparent"
@@ -44,7 +76,6 @@ export default function Dashboard() {
             <View style={styles.headerSolicitacoes}>
               <Text style={{fontWeight: "700", fontSize: 20, color: "#FFFFFF"}}>Solicitações</Text>
               <Text style={{fontWeight: "700", fontSize: 12, color: "#67EB60"}} onPress={() => router.push('/orders')}>Ver todas</Text>
-              {/* <Text style={{fontWeight: "700", fontSize: 12, color: "#67EB60"}} onPress={onModalOpen}>Ver todas</Text> */}
             </View>
             <View style={styles.boxSolicitacoesContainer}>
               <View style={styles.box}>
@@ -95,9 +126,6 @@ export default function Dashboard() {
             <Text style={styles.textFooter}>Loja</Text>
           </Pressable>
         </View>
-        {/* <ModalCenter isVisible={isModalVisible} onClose={onModalClose}>
-          
-        </ModalCenter> */}
     </View>
   );
 }

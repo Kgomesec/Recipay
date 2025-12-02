@@ -1,21 +1,36 @@
-// definição do modelo User
-
 const { DataTypes } = require('sequelize');
-const { sequelize } = require('src/backend/config/database')
+const sequelize = require('../config/database');
 
 const User = sequelize.define('User', {
+    name: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    cpf: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },
+    birthDate: {
+        type: DataTypes.DATEONLY,
+        allowNull: false
+    },
     email: {
         type: DataTypes.STRING,
-        unique: true,
         allowNull: false,
+        unique: true
     },
     password: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
     },
+    role: {
+        type: DataTypes.ENUM('user', 'admin'),
+        defaultValue: 'user'
+    }
 }, {
-    timestamps: false,
-    tableName: 'users', //nome da tabela. Trocar quando tiver bd
+    tableName: 'users',
+    timestamps: true
 });
 
 module.exports = User;

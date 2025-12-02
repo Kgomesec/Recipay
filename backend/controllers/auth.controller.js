@@ -1,6 +1,15 @@
-// lógica de login
+const authService = require('../services/auth.service');
 
-const authService = require('src/backend/services/auth.service');
+exports.register = async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const result = await authService.registerUser(email, password);
+        res.json(result);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+};
 
 exports.login = async (req, res) => {
     const { email, password } = req.body;
