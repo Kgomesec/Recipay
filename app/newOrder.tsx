@@ -1,29 +1,88 @@
 import Button from '@/components/Button';
 import InputChecklist from '@/components/Checklist';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function NewOrder() {
     const router = useRouter();
-    // const [checked, setChecked] = useState(false); -- isso daqui é pra quando for selecionar todos
-    const [item1, setItem1] = useState(false);
-    const [item2, setItem2] = useState(false);
-    const [item3, setItem3] = useState(false); 
-    const [item4, setItem4] = useState(false);
-    const [item5, setItem5] = useState(false);
-    const [item6, setItem6] = useState(false);
-    const [item7, setItem7] = useState(false);
+    const [firstName, setFirstName] = useState('');
+    const [selectedQuantity, setSelectedQuantity] = useState('');
+    const [selectedMaterial, setSelectedMaterial] = useState('');
+
+    useEffect(() => {
+        const loadUser = async () => {
+            try {
+                const sessionStr = await AsyncStorage.getItem('session');
+                if (sessionStr) {
+                    const session = JSON.parse(sessionStr);
+                    const nomeCompleto = session.name || "Usuário";
+                    const primeiroNome = nomeCompleto.split(' ')[0];
+                    setFirstName(primeiroNome);
+                }
+            } catch (err) {
+                console.log('Erro ao carregar usuário:', err);
+            }
+        };
+
+        loadUser();
+    }, []);
+
+    // const [item1, setItem1] = useState(false);
+    // const [item2, setItem2] = useState(false);
+    // const [item3, setItem3] = useState(false);
+    // const [item4, setItem4] = useState(false);
+
+    const handleNewOrder = async () => {
+        const sessionStr = await AsyncStorage.getItem('session');
+        if (!sessionStr) return alert("Erro: usuário não logado");
+
+        const session = JSON.parse(sessionStr);
+
+        if (!selectedMaterial) return alert("Selecione um material");
+        if (!selectedQuantity) return alert("Selecione a quantidade");
+
+        const body = {
+            userId: session.userId,
+            materialType: selectedMaterial,
+            quantity: selectedQuantity,
+            address: "Rua Marcial, 25 — Mooca, SP"
+        };
+
+        console.log("Enviando solicitação:", body);
+
+
+        const response = await fetch("http://192.168.15.12:3000/requests/new", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body),
+            credentials: 'include'
+        });
+
+        const data = await response.json();
+        console.log("Resposta do backend:", data);
+
+        if (response.ok) {
+            alert("Solicitação criada com sucesso!");
+            router.push("/dashboard");
+        } else {
+            alert("Erro ao criar solicitação");
+        }
+    };
 
     return (
         <View style={[styles.body]}>
             <View style={[styles.header]}>
                 <View style={styles.containerUser}>
                     <View style={styles.user}><Image source={require('@/assets/images/user.jpg')} style={styles.userImage}></Image></View>
-                    <Text style={styles.text}>Olá, Miguel</Text>
+                    <Text style={styles.text}>Olá, {firstName}</Text>
                 </View>
             </View>
-            <ScrollView style={{width: "100%"}}>
+
+            <ScrollView style={{ width: "100%" }}>
                 <View style={styles.main}>
                     <View style={styles.containerBack}>
                         <Button
@@ -32,95 +91,105 @@ export default function NewOrder() {
                             onPress={() => router.back()}
                         />
                     </View>
+
                     <View style={styles.orderContainer}>
                         <View style={styles.materialsContainer}>
-                            <Text style={styles.title}>Materiais</Text> 
+                            <Text style={styles.title}>Materiais</Text>
                             <View style={styles.itemsContainer}>
+
                                 <View style={styles.item}>
-                                    <InputChecklist 
-                                    label = "Plástico"
-                                    checked = {item1}
-                                    onChange = {() => setItem1(!item1)} 
+                                    <InputChecklist
+                                        label="Plástico"
+                                        checked={selectedMaterial === "plastico"}
+                                        onChange={() => setSelectedMaterial("plastico")}
                                     />
                                 </View>
+
                                 <View style={styles.item}>
-                                    <InputChecklist 
-                                    label = "Vidro"
-                                    checked = {item2}
-                                    onChange = {() => setItem2(!item2)} 
+                                    <InputChecklist
+                                        label="Vidro"
+                                        checked={selectedMaterial === "vidro"}
+                                        onChange={() => setSelectedMaterial("vidro")}
                                     />
                                 </View>
+
                                 <View style={styles.item}>
-                                    <InputChecklist 
-                                    label = "Metal"
-                                    checked = {item3}
-                                    onChange = {() => setItem3(!item3)} 
+                                    <InputChecklist
+                                        label="Metal"
+                                        checked={selectedMaterial === "metal"}
+                                        onChange={() => setSelectedMaterial("metal")}
                                     />
                                 </View>
+
                                 <View style={styles.item}>
-                                    <InputChecklist 
-                                    label = "Papel"
-                                    checked = {item4}
-                                    onChange = {() => setItem4(!item4)} 
+                                    <InputChecklist
+                                        label="Papel"
+                                        checked={selectedMaterial === "papel"}
+                                        onChange={() => setSelectedMaterial("papel")}
                                     />
                                 </View>
+
                             </View>
                         </View>
 
+
                         <View style={styles.quantContainer}>
-                            <Text style={styles.title}>Quantidade</Text> 
+                            <Text style={styles.title}>Quantidade</Text>
+
                             <View style={styles.itemsContainer}>
                                 <View style={styles.item}>
-                                    <InputChecklist 
-                                    label = "Grande escala (100 kg+)"
-                                    checked = {item5}
-                                    onChange = {() => setItem5(!item5)} 
+                                    <InputChecklist
+                                        label="Grande escala (20 kg+)"
+                                        checked={selectedQuantity === "grande"}
+                                        onChange={() => setSelectedQuantity("grande")}
                                     />
                                 </View>
+
                                 <View style={styles.item}>
-                                    <InputChecklist 
-                                    label = "Média escala (30 - 60 kg)"
-                                    checked = {item6}
-                                    onChange = {() => setItem6(!item6)} 
+                                    <InputChecklist
+                                        label="Média escala (10 - 19 kg)"
+                                        checked={selectedQuantity === "medio"}
+                                        onChange={() => setSelectedQuantity("medio")}
                                     />
                                 </View>
+
                                 <View style={styles.item}>
-                                    <InputChecklist 
-                                    label = "Pequena escala (10 - 29 kg)"
-                                    checked = {item7}
-                                    onChange = {() => setItem7(!item7)} 
+                                    <InputChecklist
+                                        label="Pequena escala (1 - 9 kg)"
+                                        checked={selectedQuantity === "pequeno"}
+                                        onChange={() => setSelectedQuantity("pequeno")}
                                     />
                                 </View>
                             </View>
                         </View>
 
                         <View style={styles.localContainer}>
-                            <Text style={styles.title}>Endereço</Text> 
+                            <Text style={styles.title}>Endereço</Text>
                             <View style={styles.itemsContainer}>
                                 <Button
                                     variant="address"
                                     street="Rua Marcial, 25"
                                     city="Mooca — São Paulo, SP"
-                                    onPress={() => alert("Clicou no endereço")}
+                                    onPress={() => alert("Endereço selecionado")}
                                 />
                             </View>
                         </View>
 
                         <View style={styles.anexoContainer}>
-                            <Text style={styles.title}>Anexos</Text> 
+                            <Text style={styles.title}>Anexos</Text>
                             <Button
                                 variant="image"
                                 imageSource={require('@/assets/images/anexo.png')}
                                 onPress={() => alert("Adicionar anexo")}
-                                style={{justifyContent: "flex-start"}}
+                                style={{ justifyContent: "flex-start" }}
                             />
                         </View>
-
+                        
                         <Button
                             variant="primary"
                             title="NOVA SOLICITAÇÃO"
-                            onPress={() => router.push('/newOrder')}
-                            style={{marginBottom: 50}}
+                            onPress={handleNewOrder}
+                            style={{ marginBottom: 50 }}
                         />
                     </View>
                 </View>
@@ -168,29 +237,6 @@ const styles = StyleSheet.create({
         borderColor: "#05FF3B"
     },
     userImage: {
-        width: "100%",
-        height: "100%",
-        objectFit: "cover"
-    },
-    containerLogo: {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        gap: 20
-    },
-    eye: {
-        width: 40, 
-        height: 40
-    },
-    containerLeaf: {
-        width: 60,
-        height: 60,
-        overflow: "hidden",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    imageLeaf: {
         width: "100%",
         height: "100%",
         objectFit: "cover"
@@ -250,10 +296,4 @@ const styles = StyleSheet.create({
         padding: 15,
         gap: 10
     },
-    // itemText: {
-    //     color: '#FFFFFF',
-    //     fontSize: 16,
-    //     fontWeight: 500,
-    //     textAlign: "center",
-    // },
 });

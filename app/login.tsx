@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
+import { MaterialType, QuantityType, RequestType } from './orders';
 
 export default function Login() {
   const router = useRouter();
@@ -14,53 +15,90 @@ export default function Login() {
   const [senhaError, setSenhaError] = useState('');
 
   const handleLogin = async () => {
-    let hasError = false;
+  let hasError = false;
 
-    // validação simples
-    if (!email.includes('@')) {
-      setEmailError('Email inválido');
-      hasError = true;
-    } else {
-      setEmailError('');
+  // validação simples
+  if (!email.includes('@')) {
+    setEmailError('Email inválido');
+    hasError = true;
+  } else {
+    setEmailError('');
+  }
+
+  if (senha.length < 4) {
+    setSenhaError('Senha inválida');
+    hasError = true;
+  } else {
+    setSenhaError('');
+  }
+
+  if (hasError) return;
+
+  try {
+    const result = await loginRequest(email, senha);
+
+    if (!result.session?.userId) {
+      Alert.alert("Erro", "Sessão inválida.");
+      return;
     }
 
-    if (senha.length < 4) {
-      setSenhaError('Senha inválida');
-      hasError = true;
-    } else {
-      setSenhaError('');
+    // salva token (sessão)
+    // await AsyncStorage.setItem('token', result.token);
+    await AsyncStorage.setItem('session', JSON.stringify(result.session));
+
+    // salva informações do usuário
+    if (result.user) {
+      await AsyncStorage.setItem('userId', String(result.user.id));
+      await AsyncStorage.setItem('userEmail', result.user.email);
+      await AsyncStorage.setItem('userRole', result.user.role);
     }
 
-    if (hasError) return;
+    // -----------------------------
+    // PUXAR SOLICITAÇÕES E CALCULAR RP
+    // -----------------------------
+    const res = await fetch(`http://192.168.15.12:3000/requests/user/${result.session.userId}`, {
+      credentials: 'include'
+    });
+    const data = await res.json();
+    const requests: RequestType[] = Array.isArray(data) ? data : data.requests ?? [];
 
-    try {
-      const result = await loginRequest(email, senha);
-
-      if (!result.session?.userId) {
-        Alert.alert("Erro", "Sessão inválida.");
-        return;
+    function calcRP(material: MaterialType, quantity: QuantityType): number {
+      let base = 0;
+      switch (material) {
+        case "plastico": base = 20; break;
+        case "vidro": base = 25; break;
+        case "metal": base = 40; break;
+        case "papel": base = 15; break;
       }
-
-      // salva token (sessão)
-      // await AsyncStorage.setItem('token', result.token);
-      await AsyncStorage.setItem('session', JSON.stringify(result.session));
-
-      // salva informações do usuário
-      if (result.user) {
-        await AsyncStorage.setItem('userId', String(result.user.id));
-        await AsyncStorage.setItem('userEmail', result.user.email);
-        await AsyncStorage.setItem('userRole', result.user.role);
-      }
-
-      Alert.alert('Sucesso!', 'Login realizado!');
-
-      router.push('/dashboard');
-
-    } catch (err: any) {
-      console.log(err);
-      Alert.alert('Erro', err.response?.data?.error || 'Falha na autenticação');
+      const mult: Record<QuantityType, number> = { pequeno: 1, medio: 2.5, grande: 5 };
+      return Math.floor(base * (mult[quantity] ?? 1));
     }
-  };
+
+    let rpPendentes = 0;
+    let rpAprovadas = 0;
+    let rpRecusadas = 0;
+
+    requests.forEach(req => {
+      const rp = calcRP(req.materialType as MaterialType, req.quantity as QuantityType);
+      if (req.status === 'pending') rpPendentes += rp;
+      else if (req.status === 'approved') rpAprovadas += rp;
+      else if (req.status === 'rejected') rpRecusadas += rp;
+    });
+
+    await AsyncStorage.setItem('rpPendentes', String(rpPendentes));
+    await AsyncStorage.setItem('rpAprovadas', String(rpAprovadas));
+    await AsyncStorage.setItem('rpRecusadas', String(rpRecusadas));
+    // -----------------------------
+
+    Alert.alert('Sucesso!', 'Login realizado!');
+    router.push('/dashboard');
+
+  } catch (err: any) {
+    console.log(err);
+    Alert.alert('Erro', err.response?.data?.error || 'Falha na autenticação');
+  }
+};
+
 
   return (
     <View style={styles.body}>

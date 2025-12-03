@@ -16,6 +16,7 @@ app.use(session({
 }));
 
 app.use('/auth', require('./routes/auth.routes'));
+app.use('/requests', require('./routes/request.routes'));
 
 sequelize.sync().then(() => {
     console.log("Banco sincronizado");
