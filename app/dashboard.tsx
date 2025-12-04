@@ -82,7 +82,7 @@ export default function Dashboard() {
         </View>
         <View style={styles.containerLogo}>
           <Pressable onPress={handleLogout}>
-            <Image source={require('@/assets/images/eye-open.png')} style={styles.eye}></Image>
+            <Image source={require('@/assets/images/exit.png')} style={styles.eye}></Image>
           </Pressable>
           <View style={styles.containerLeaf}>
             <Button

@@ -17,7 +17,6 @@ export default function Login() {
   const handleLogin = async () => {
   let hasError = false;
 
-  // validação simples
   if (!email.includes('@')) {
     setEmailError('Email inválido');
     hasError = true;
@@ -42,20 +41,14 @@ export default function Login() {
       return;
     }
 
-    // salva token (sessão)
-    // await AsyncStorage.setItem('token', result.token);
     await AsyncStorage.setItem('session', JSON.stringify(result.session));
 
-    // salva informações do usuário
     if (result.user) {
       await AsyncStorage.setItem('userId', String(result.user.id));
       await AsyncStorage.setItem('userEmail', result.user.email);
       await AsyncStorage.setItem('userRole', result.user.role);
     }
 
-    // -----------------------------
-    // PUXAR SOLICITAÇÕES E CALCULAR RP
-    // -----------------------------
     const res = await fetch(`http://192.168.15.12:3000/requests/user/${result.session.userId}`, {
       credentials: 'include'
     });
