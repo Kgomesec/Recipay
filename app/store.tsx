@@ -1,18 +1,36 @@
 import Button from '@/components/Button';
-import HorizontalScrollbar from '@/components/HorizontalScrollbar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
-import React from 'react';
-import { Image, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function Store() {
     const router = useRouter();
+    const [firstName, setFirstName] = useState('');
+    useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const sessionStr = await AsyncStorage.getItem('session');
+        if (sessionStr) {
+          const session = JSON.parse(sessionStr);
+          const nomeCompleto = session.name || "Usuário";
+          const primeiroNome = nomeCompleto.split(' ')[0];
+          setFirstName(primeiroNome);
+        }
+      } catch (err) {
+        console.log('Erro ao carregar usuário:', err);
+      }
+    };
+
+    loadUser();
+  }, []);
 
     return (
         <View style={[styles.body]}>
             <View style={[styles.header]}>
                 <View style={styles.containerUser}>
-                    <View style={styles.user}><Image source={require('@/assets/images/user.jpg')} style={styles.userImage}></Image></View>
-                    <Text style={styles.text}>Olá, Miguel</Text>
+                    <View style={styles.user}><Image source={require('@/assets/images/profile.png')} style={styles.userImage}></Image></View>
+                    <Text style={styles.text}>Olá, {firstName}</Text>
                 </View>
                 <View style={styles.containerLogo}>
                     <View style={styles.containerLeaf}>
@@ -33,13 +51,13 @@ export default function Store() {
                 </View>
                 <View style={{ width: "100%" }}>
                     <Text style={styles.title}>Serviços Digitais</Text>
-                    <View style={{ height: 500, width: "100%"  }}>
-                        <HorizontalScrollbar>
+                    <View style={{ height: 575, width: "100%", marginTop: 20 }}>
+                        <ScrollView style={{width: "100%", height: "100%"}}>
                             <View style={styles.card}>
                                 <Image source={require('@/assets/images/ps60.png')} style={{ width: 300, height: 300 }}></Image>
                                 <Button
                                     variant="primary"
-                                    title="2000 RP"
+                                    title="1200 RP"
                                     onPress={() => { }}
                                     style={{ width: "55%", paddingTop: 15, paddingBottom: 15 }}
                                 />
@@ -66,7 +84,7 @@ export default function Store() {
                                 <Image source={require('@/assets/images/razer50.png')} style={{ width: 300, height: 300 }}></Image>
                                 <Button
                                     variant="primary"
-                                    title="2000 RP"
+                                    title="1000 RP"
                                     onPress={() => { }}
                                     style={{ width: "55%", paddingTop: 15, paddingBottom: 15 }}
                                 />
@@ -75,7 +93,7 @@ export default function Store() {
                                 <Image source={require('@/assets/images/xbox5.png')} style={{ width: 300, height: 300 }}></Image>
                                 <Button
                                     variant="primary"
-                                    title="2000 RP"
+                                    title="125 RP"
                                     onPress={() => { }}
                                     style={{ width: "55%", paddingTop: 15, paddingBottom: 15 }}
                                 />
@@ -84,12 +102,12 @@ export default function Store() {
                                 <Image source={require('@/assets/images/xbox10.png')} style={{ width: 300, height: 300 }}></Image>
                                 <Button
                                     variant="primary"
-                                    title="2000 RP"
+                                    title="230 RP"
                                     onPress={() => { }}
                                     style={{ width: "55%", paddingTop: 15, paddingBottom: 15 }}
                                 />
                             </View>
-                        </HorizontalScrollbar>
+                        </ScrollView>
                     </View>
                 </View>
             </View>

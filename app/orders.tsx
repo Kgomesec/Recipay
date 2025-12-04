@@ -122,7 +122,7 @@ export default function Order() {
             <View style={[styles.header]}>
                 <View style={styles.containerUser}>
                     <View style={styles.user}>
-                        <Image source={require('@/assets/images/user.jpg')} style={styles.userImage}></Image>
+                        <Image source={require('@/assets/images/profile.png')} style={styles.userImage}></Image>
                     </View>
                     <Text style={styles.text}>Olá, {firstName}</Text>
                 </View>
@@ -131,7 +131,7 @@ export default function Order() {
                     <View style={styles.containerLeaf}>
                         <Button
                             variant="transparent"
-                            onPress={() => router.push('/newOrder')}
+                            onPress={() => router.replace('/newOrder')}
                         />
                     </View>
                 </View>

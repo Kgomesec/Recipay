@@ -90,8 +90,7 @@ export default function Login() {
     await AsyncStorage.setItem('rpRecusadas', String(rpRecusadas));
     // -----------------------------
 
-    Alert.alert('Sucesso!', 'Login realizado!');
-    router.push('/dashboard');
+    router.replace('/dashboard');
 
   } catch (err: any) {
     console.log(err);

@@ -1,7 +1,8 @@
 import Button from '@/components/Button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, Image, Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function Dashboard() {
@@ -29,24 +30,25 @@ export default function Dashboard() {
     loadUser();
   }, []);
 
-  useEffect(() => {
-    const loadRP = async () => {
-      try {
-        const pending = parseInt(await AsyncStorage.getItem('rpPendentes') || '0');
-        const approved = parseInt(await AsyncStorage.getItem('rpAprovadas') || '0');
-        const rejected = parseInt(await AsyncStorage.getItem('rpRecusadas') || '0');
+  useFocusEffect(
+    useCallback(() => {
+      const loadRP = async () => {
+        try {
+          const pending = parseInt(await AsyncStorage.getItem('rpPendentes') || '0');
+          const approved = parseInt(await AsyncStorage.getItem('rpAprovadas') || '0');
+          const rejected = parseInt(await AsyncStorage.getItem('rpRecusadas') || '0');
 
-        setPendingRP(pending);
-        setApprovedRP(approved);
-        setRejectedRP(rejected);
-        console.log('RP carregados:', { pendingRP, approvedRP, rejectedRP });
-      } catch (err) {
-        console.log('Erro ao carregar RP:', err);
-      }
-    };
+          setPendingRP(pending);
+          setApprovedRP(approved);
+          setRejectedRP(rejected);
+        } catch (err) {
+          console.log('Erro ao carregar RP:', err);
+        }
+      };
 
-    loadRP();
-  }, []);
+      loadRP();
+    }, [])
+  );
 
   const handleLogout = async () => {
     try {
@@ -74,7 +76,7 @@ export default function Dashboard() {
       <View style={[styles.header]}>
         <View style={styles.containerUser}>
           <View style={styles.user}>
-            <Image source={require('@/assets/images/user.jpg')} style={styles.userImage}></Image>
+            <Image source={require('@/assets/images/profile.png')} style={styles.userImage}></Image>
           </View>
           <Text style={styles.text}>Olá, {firstName}</Text>
         </View>
@@ -139,10 +141,10 @@ export default function Dashboard() {
           <Image source={require('@/assets/images/home-green.png')} style={styles.image}></Image>
           <Text style={styles.textFooter}>Home</Text>
         </View>
-        <View style={styles.footerContent}>
+        <Pressable style={styles.footerContent} onPress={() => router.push('/ranking')}>
           <Image source={require('@/assets/images/ranking.png')} style={styles.image}></Image>
           <Text style={styles.textFooter}>Ranking</Text>
-        </View>
+        </Pressable>
         <Pressable style={styles.footerContent} onPress={() => router.push('/trade')}>
           <Image source={require('@/assets/images/trocar-verde.png')} style={styles.image}></Image>
           <Text style={styles.textFooter}>Trocas</Text>

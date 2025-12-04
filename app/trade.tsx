@@ -1,16 +1,68 @@
 import Button from '@/components/Button';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
 export default function Trade() {
     const router = useRouter();
+    const [firstName, setFirstName] = useState('');
+
+    const [rp, setRp] = useState("");
+    const [reais, setReais] = useState("");
+    const [userRp, setUserRp] = useState(0);
+
+    const RP_VALUE = 5 / 125; // cada RP vale R$0,04
+
+    useEffect(() => {
+        const loadUser = async () => {
+            try {
+                const sessionStr = await AsyncStorage.getItem('session');
+                const userRP = await AsyncStorage.getItem('rpAprovadas');
+                if (sessionStr) {
+                    const session = JSON.parse(sessionStr);
+                    const nomeCompleto = session.name || "Usuário";
+                    const primeiroNome = nomeCompleto.split(' ')[0];
+                    setFirstName(primeiroNome);
+                    setUserRp(parseInt(await AsyncStorage.getItem('rpAprovadas') || "0", 10));
+                }
+            } catch (err) {
+                console.log('Erro ao carregar usuário:', err);
+            }
+        };
+
+        loadUser();
+    }, []);
+
+    function handleRpChange(value: string) {
+
+        let numeric = parseFloat(value.replace(",", "."));
+
+        if (isNaN(numeric)) {
+            setRp("");
+            setReais("R$ 0.00");
+            return;
+        }
+
+        if (numeric > userRp) {
+            numeric = userRp;
+            setRp(String(userRp));
+        } else {
+            setRp(value);
+        }
+
+        const calc = numeric * RP_VALUE;
+        setReais(`R$ ${calc.toFixed(2)}`);
+    }
 
     return (
         <View style={[styles.body]}>
             <View style={[styles.header]}>
                 <View style={styles.containerUser}>
-                    <View style={styles.user}><Image source={require('@/assets/images/user.jpg')} style={styles.userImage}></Image></View>
-                    <Text style={styles.text}>Olá, Miguel</Text>
+                    <View style={styles.user}>
+                        <Image source={require('@/assets/images/profile.png')} style={styles.userImage}></Image>
+                    </View>
+                    <Text style={styles.text}>Olá, {firstName}</Text>
                 </View>
                 <View style={styles.containerLogo}>
                     <View style={styles.containerLeaf}>
@@ -21,6 +73,7 @@ export default function Trade() {
                     </View>
                 </View>
             </View>
+
             <ScrollView style={{ width: "100%" }}>
                 <View style={styles.main}>
                     <View style={styles.containerBack}>
@@ -30,6 +83,7 @@ export default function Trade() {
                             onPress={() => router.back()}
                         />
                     </View>
+
                     <View style={styles.tradeContainer}>
 
                         <View style={styles.inputContainer}>
@@ -39,17 +93,20 @@ export default function Trade() {
                                 placeholder="0.00 RP"
                                 placeholderTextColor="#888"
                                 keyboardType="numeric"
+                                value={rp}
+                                onChangeText={handleRpChange}
                             />
                         </View>
+
                         <View style={styles.inputContainer}>
                             <Text style={styles.inputLabel}>Valor em Reais</Text>
                             <TextInput
-                                style={styles.input}
-                                placeholder="R$ 0.00"
-                                placeholderTextColor="#888"
-                                keyboardType="numeric"
+                                editable={false}
+                                style={[styles.input, { backgroundColor: "#2C2C2C" }]}
+                                value={reais}
                             />
                         </View>
+
                         <Button
                             variant="primary"
                             title="CONFIRMAR TROCA"
